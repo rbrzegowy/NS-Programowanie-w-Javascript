@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="60-js-dom.css" />
+    <title>JS i DOM</title>
+  </head>
+  <body>
+    <header>
+      <h1>JS i DOM</h1>
+    </header>
+    <main>
+      <!-- 1. getElements -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Pobieranie elementów</h2>
+          <ul>
+            <li><code>getElementById(id)</code> – jeden element po atrybucie id</li>
+            <li><code>querySelector(css)</code> – pierwszy pasujący, selektory jak w CSS</li>
+            <li><code>querySelectorAll(css)</code> – statyczna NodeList wszystkich pasujących</li>
+            <li><code>getElementsByClassName</code> – żywa HTMLCollection (aktualizuje się przy zmianie DOM)</li>
+          </ul>
+          <code>
+            const btn = document.getElementById('ok') <br />
+            const box = document.querySelector('.container') <br />
+            const imgs = document.querySelectorAll('.thumb') <br />
+            const prices = document.getElementsByClassName('price')
+          </code>
+        </div>
+        <div class="demo-panel demo-selectors">
+          <div class="selector-row">
+            <button id="ok">OK</button>
+            <button id="cancel">Anuluj</button>
+          </div>
+          <div class="container products-grid">
+            <article class="product">
+              <div class="thumb thumb-1" data-id="p1" role="img" aria-label="Produkt 1">thumb 1</div>
+              <p class="price">99 PLN</p>
+            </article>
+            <article class="product">
+              <div class="thumb thumb-2" data-id="p2" role="img" aria-label="Produkt 2">thumb 2</div>
+              <p class="price">149 PLN</p>
+            </article>
+          </div>
+          <p id="selectors-log" class="demo-log"></p>
+        </div>
+      </section>
+
+      <!-- 2. changeElementContent -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">2</span>
+          <h2>Zmiana zawartości elementu</h2>
+          <ul>
+            <li><code>innerHTML</code> – nadpisuje zawartość jako HTML, uwaga na XSS!</li>
+            <li><code>textContent</code> – bezpieczny text-only, tagi nie są interpretowane jako html</li>
+            <li><code>innerText</code> – jak textContent, ale uwzględnia widoczność tekstu definiowaną w CSS</li>
+          </ul>
+          <code>
+            el.innerHTML = '&lt;h1&gt;Nowa treść&lt;/h1&gt;' <br />
+            el.textContent = 'Zwykły tekst'
+          </code>
+        </div>
+        <div class="demo-panel demo-content">
+          <div id="content-box" class="demo-box">
+            <p>Oryginalny paragraf w kontenerze.</p>
+          </div>
+          <div id="content-box2" class="demo-box">
+            <p>Drugi kontener.</p>
+          </div>
+          <div class="demo-controls">
+            <button onclick="changeElementContent()">Uruchom</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. createElement -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">3</span>
+          <h2>Tworzenie nowego elementu</h2>
+          <ul>
+            <li><code>document.createElement(tag)</code> – tworzy węzeł poza drzewem DOM</li>
+            <li>Nowy element jest "w powietrzu" – nie pojawi się na stronie bez inseracji</li>
+            <li>Można mu nadać atrybuty, klasy i treść przed dodaniem do DOM</li>
+          </ul>
+          <code>
+            const btn = document.createElement('button') <br />
+            btn.textContent = 'Nowy przycisk' <br />
+            btn.className = 'my-btn'
+          </code>
+        </div>
+        <div class="demo-panel demo-create">
+          <div id="create-box" class="demo-box">
+            <p class="demo-hint">Tu pojawi się nowo utworzony element</p>
+          </div>
+          <div class="demo-controls">
+            <button onclick="createNewElement()">Uruchom</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. cloneElement -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">4</span>
+          <h2>Klonowanie elementu</h2>
+          <ul>
+            <li><code>element.cloneNode(true)</code> – głęboka kopia całego poddrzewa (dzieci też)</li>
+            <li><code>cloneNode(false)</code> – tylko element bez dzieci</li>
+            <li>Klon nie ma przypisanych event listenerów dodanych przez JS (addEventListener)</li>
+          </ul>
+          <code>
+            const klon = okButton.cloneNode(true) <br />
+            klon.id = 'ok-klon' <br />
+            container.appendChild(klon)
+          </code>
+        </div>
+
+        <div class="demo-panel demo-clone">
+          <div id="clone-box" class="demo-box">
+            <button id="clone-source" class="source-btn">Przycisk oryginał</button>
+          </div>
+          <div class="demo-controls">
+            <button onclick="cloneElement()">Uruchom</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. changeElementDescendants -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">5</span>
+          <h2>Modyfikacja dzieci elementu</h2>
+          <ul>
+            <li><code>parent.appendChild(el)</code> – dodaje na końcu listy dzieci</li>
+            <li><code>parent.removeChild(el)</code> – usuwa wskazane dziecko</li>
+            <li><code>parent.replaceChild(new, old)</code> – zamienia jedno dziecko na inne</li>
+            <li>Jeśli element jest już w DOM – <code>appendChild</code> go przenosi, nie duplikuje</li>
+          </ul>
+          <code>
+            container.appendChild(okButton) <br />
+            container.removeChild(cancelButton) <br />
+            container.replaceChild(newEl, oldEl)
+          </code>
+        </div>
+        <div class="demo-panel demo-descendants">
+          <div id="descendants-box" class="demo-box">
+            <span class="dom-chip" id="chip-a">Element A</span>
+            <span class="dom-chip" id="chip-b">Element B</span>
+            <span class="dom-chip" id="chip-c">Element C</span>
+          </div>
+          <div class="demo-controls">
+            <button onclick="changeElementDescendants()">Uruchom</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. changeSiblings -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">6</span>
+          <h2>Wstawianie przed/po elemencie</h2>
+          <ul>
+            <li>Metody: <code>el.before()</code>, <code>el.after()</code></li>
+            <li>Jeśli wstawiany element już jest w DOM – zostanie przeniesiony (nie zduplikowany)</li>
+            <li>Starsza alternatywa: <code>parent.insertBefore(el, ref)</code> – wstawia <em>el</em> tuż przed <em>ref</em></li>
+          </ul>
+          <code> container.insertBefore(newEl, imgList[0]) <br /> </code>
+        </div>
+        <div class="demo-panel demo-insert">
+          <div id="insert-box" class="demo-box">
+            <span class="dom-chip chip-ref" id="insert-ref">Punkt odniesienia</span>
+            <span class="dom-chip chip-to-move">Istniejący element</span>
+          </div>
+          <div class="demo-controls">
+            <button onclick="changeSiblings()">Uruchom</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. changeElementStyle + changeElementClasses -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">7</span>
+          <h2>Style i klasy CSS</h2>
+          <ul>
+            <li><code>el.style.property</code> – styl inline (camelCase, np. <code>marginTop</code>)</li>
+            <li><code>window.getComputedStyle(el)</code> – live obiekt ze wszystkimi obliczonymi wartościami</li>
+            <li><code>el.className</code> – pełne nadpisanie listy klas</li>
+            <li><code>el.style-box.add / remove / toggle / contains</code> – precyzyjna praca z klasami</li>
+          </ul>
+          <code>
+            el.style.background = '#000' <br />
+            getComputedStyle(el).marginTop <br />
+            el.classList.toggle('active')
+          </code>
+        </div>
+        <div class="demo-panel demo-styles">
+          <div id="style-box" class="demo-box style-target">
+            <p>Styl i klasy zmieniane przez JS</p>
+            <p id="style-log" class="demo-log"></p>
+          </div>
+          <div class="demo-controls">
+            <button onclick="changeElementStyle()">Style</button>
+            <button onclick="changeElementClasses()">Klasy</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. changeElementAttributes + changeElementDataset -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">8</span>
+          <h2>Atrybuty i dataset</h2>
+          <ul>
+            <li><code>el.setAttribute(name, val)</code> – ustawia atrybut HTML</li>
+            <li><code>el.removeAttribute(name)</code> – usuwa atrybut</li>
+            <li><code>el.getAttribute(name)</code> – odczytuje wartość atrybutu</li>
+            <li><code>el.dataset</code> – obiekt z atrybutami <code>data-*</code> jako właściwościami</li>
+          </ul>
+          <code>
+            btn.setAttribute('disabled', 'true') <br />
+            btn.removeAttribute('disabled') <br />
+            div.dataset.id // &lt;div data-id="p1"&gt;
+          </code>
+        </div>
+        <div class="demo-panel demo-attributes">
+          <button id="attr-btn" class="source-btn">Przycisk z atrybutami</button>
+          <div class="thumb thumb-1" id="attr-div" data-id="p1" data-username="john" role="img" aria-label="Produkt 1">thumb 1 (data-id="p1")</div>
+          <p id="attr-log" class="demo-log"></p>
+          <div class="demo-controls">
+            <button onclick="changeElementAttributes()">Atrybuty</button>
+            <button onclick="changeElementDataset()">Dataset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. rozmiary -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">9</span>
+          <h2>Rozmiary elementów i viewport</h2>
+          <ul>
+            <li><code>window.innerWidth / innerHeight</code> – czysty viewport (bez pasków przeglądarki)</li>
+            <li><code>offsetWidth / offsetHeight</code> – z paddingiem i borderem</li>
+            <li><code>clientWidth / clientHeight</code> – bez bordera</li>
+            <li><code>scrollWidth / scrollHeight</code> – pełna zawartość razem z ukrytą za scrollem</li>
+          </ul>
+          <code>
+            el.offsetWidth / el.clientWidth / el.scrollWidth <br />
+            window.innerWidth / window.innerHeight
+          </code>
+        </div>
+        <div class="demo-panel demo-sizes">
+          <div id="sizes-box" class="demo-box sizes-scroll-box">
+            <div class="sizes-inner">
+              Długi przewijalny tekst — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua ut enim.
+            </div>
+          </div>
+          <dl id="sizes-output" class="sizes-readout"></dl>
+        </div>
+      </section>
+    </main>
+    <script src="60-js-dom.js"></script>
+  </body>
+</html>

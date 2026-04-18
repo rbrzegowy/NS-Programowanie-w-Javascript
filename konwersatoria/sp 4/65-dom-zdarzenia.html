@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM, zdarzenia w JS</title>
+    <script type="text/javascript" src="./65-dom-zdarzenia.js"></script>
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="65-dom-zdarzenia.css" />
+    <style></style>
+  </head>
+
+  <body>
+    <header>
+      <h1>DOM i zdarzenia</h1>
+    </header>
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Obsługa touch events</h2>
+          <ul>
+            <li><code>touchstart</code> zmienia stan kulki po rozpoczęciu dotyku</li>
+            <li><code>touchmove</code> przesuwa element i rysuje ślad na płótnie</li>
+            <li><code>touchend</code> przywraca domyślny wygląd kulki</li>
+          </ul>
+          <code>
+            element.addEventListener('touchstart', handler) <br />
+            element.addEventListener('touchmove', handler) <br />
+            element.addEventListener('touchend', handler)
+          </code>
+        </div>
+        <div class="demo-panel demo-touch-events">
+          <div class="demo-controls">
+            <button class="source-btn" id="btn">Wyśrodkuj kulkę</button>
+            <button id="brush" type="button" class="source-btn touch-ball">Drag ball</button>
+          </div>
+          <div id="canvas" class="demo-box touch-canvas"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
