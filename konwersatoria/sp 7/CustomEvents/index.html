@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Events</title>
+    <script src="custom-events.js" defer></script>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Custom Events</h1>
+    </header>
+
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>EventTarget i CustomEvent</h2>
+          <ul>
+            <li>Własne zdarzenia budujemy za pomocą <code>CustomEvent</code>,</li>
+            <li>Dane zdarzenia przekazujemy przez właściwość <code>detail</code> w configu CustomEvent.</li>
+            <li>Aby wyemitować zdarzenie, użyj metody <code>dispatchEvent</code>.</li>
+            <li>Zapisywanie się na zdarzenia - <code>addEventListener</code>, tak samo jak dla standardowych eventów.</li>
+          </ul>
+          <code>target.dispatchEvent(new CustomEvent('remove', { detail: { id: 10 } }))</code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Demo</p>
+          <button id="btn" class="source-btn" type="button">Wyemituj remove z klasy Note</button>
+          <div id="event-log" class="demo-output">
+            <p class="demo-row">Kliknij przycisk albo poczekaj 5s na automatyczny event z Note.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

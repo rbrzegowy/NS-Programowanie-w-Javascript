@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animacje w JS</title>
+    <script type="text/javascript" src="./magiccamera.js"></script>
+    <script type="text/javascript" src="./canvas.js"></script>
+    <script type="text/javascript" src="./svg.js"></script>
+    <script type="text/javascript" src="./webanimations.js"></script>
+    <link rel="stylesheet" href="./animations.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Animacje i multimedia</h1>
+    </header>
+
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Magic Camera (Canvas + kamera)</h2>
+          <ul>
+            <li>Pobranie obrazu z kamery przez <code>getUserMedia</code>.</li>
+            <li>Filtrowanie pikseli i render na <code>canvas</code>.</li>
+            <li>Zrzut zdjęcia przyciskiem <code>Capture photo</code>.</li>
+          </ul>
+          <code>
+            navigator.mediaDevices.getUserMedia(...)<br />
+            ctx.getImageData(...) / ctx.putImageData(...)
+          </code>
+        </div>
+
+        <div class="demo-panel demo-camera-panel">
+          <div class="camera-controls">
+            <button id="btnPhoto" type="button" class="source-btn">Capture photo</button>
+            <input type="color" id="color-picker" />
+            <input type="range" min="0" max="100" value="10" id="filter-strength" />
+          </div>
+          <div class="camera-view">
+            <canvas id="magicCanvas"></canvas>
+            <video id="player" controls></video>
+          </div>
+          <a id="photoLink" class="photo-link" download="magic-camera.jpg">
+            <img src="" alt="Captured frame" id="photo" />
+          </a>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">2</span>
+          <h2>Canvas slider</h2>
+          <ul>
+            <li>Ładowanie obrazów do tablicy <code>Image</code>.</li>
+            <li>Animacja przejścia między slajdami przez <code>requestAnimationFrame</code>.</li>
+            <li>Pętla normalna i pętla wstecz.</li>
+          </ul>
+          <code>
+            ctx.drawImage(image, x, y, w, h)<br />
+            requestAnimationFrame(anim)
+          </code>
+        </div>
+
+        <div class="demo-panel demo-slider-panel">
+          <canvas id="plotno" width="1200" height="675"></canvas>
+          <p>Image source: designbolts.com</p>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">3</span>
+          <h2>SVG animation</h2>
+          <ul>
+            <li>Tworzenie elementów SVG przez <code>createElementNS</code>.</li>
+            <li>Animacja krzywych i kolorów.</li>
+            <li>Render kilku linii na jednym obszarze SVG.</li>
+          </ul>
+          <code> document.createElementNS('http://www.w3.org/2000/svg', 'path') </code>
+        </div>
+
+        <div class="demo-panel demo-svg-panel">
+          <div id="svg-demo-host"></div>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">4</span>
+          <h2>Web Animation API</h2>
+          <ul>
+            <li>Animacja elementu przez <code>element.animate(keyframes, options)</code>.</li>
+            <li>Kontrola stanu przyciskiem pauza/wznów.</li>
+            <li>Nasłuch zdarzenia zakończenia animacji.</li>
+          </ul>
+          <code> const animation = box.animate([...], {...}) </code>
+        </div>
+
+        <div class="demo-panel demo-webapi-panel">
+          <div class="webapi-stage">
+            <div id="box"></div>
+            <div id="box2"></div>
+          </div>
+          <div class="webapi-controls">
+            <div id="message"></div>
+            <button id="pause-animation" class="source-btn" type="button">Pause anim</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

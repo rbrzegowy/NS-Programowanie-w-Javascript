@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map, Set, WeakMap, WeakSet</title>
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Kolekcje: Map, Set, WeakMap, WeakSet</h1>
+    </header>
+
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Map</h2>
+          <ul>
+            <li>Para klucz-wartość z kluczami dowolnego typu.</li>
+            <li>Czyli kluczem może być dowolny obiekt, funkcja lub symbol.</li>
+            <li>API: <code>set</code>, <code>get</code>, <code>has</code>, <code>delete</code>, <code>size</code>.</li>
+          </ul>
+          <code>const rates = new Map(); rates.set('Elden Ring', 9);</code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Wynik</p>
+          <div id="map-output" class="demo-output"></div>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">2</span>
+          <h2>Set</h2>
+          <ul>
+            <li>Zbiór unikalnych wartości.</li>
+            <li>Duplikaty są automatycznie ignorowane.</li>
+            <li>
+              Set ma metody do pracy na zbiorach - m.in. <code>.difference</code>, <code>.intersection</code>, <code>.union</code>,
+              <code>.symmetricDifference</code>, <code>.isDisjointFrom</code>, <code>.isSubsetOf</code>, <code>.isSupersetOf</code>
+            </li>
+            <li>
+              Więcej:<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#set_composition" target="_blank"
+                >https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#set_composition</a
+              >
+            </li>
+          </ul>
+          <code>const values = new Set([1, 1, 2]); // {1, 2}</code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Wynik</p>
+          <div id="set-output" class="demo-output"></div>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">3</span>
+          <h2>WeakMap</h2>
+          <ul>
+            <li>Kluczem może być tylko element "garbage-collectable"</li>
+            <li>Gdy referencja do obiektu znika, wpis może być usunięty przez GC z WeakMap</li>
+          </ul>
+          <code>const cache = new WeakMap(); cache.set(userObj, data);</code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Wynik</p>
+          <div id="weakmap-output" class="demo-output"></div>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">4</span>
+          <h2>WeakSet</h2>
+          <ul>
+            <li>Przechowuje tylko obiekty.</li>
+            <li>Nie jest iterowalny ani enumerowalny.</li>
+          </ul>
+          <code>const visited = new WeakSet(); visited.add(nodeObj);</code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Wynik</p>
+          <div id="weakset-output" class="demo-output"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
