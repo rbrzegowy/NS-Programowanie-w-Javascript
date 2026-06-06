@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebWorker &amp; Camera</title>
+    <script src="webworker-camera.js" type="module"></script>
+    <link rel="stylesheet" href="../main.css" />
+    <style>
+      .camera-panel {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+      }
+
+      .camera-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .camera-note {
+        margin: 0;
+        color: #51627a;
+        line-height: 1.5;
+      }
+
+      .camera-stage {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .camera-stage video {
+        display: none;
+      }
+
+      .camera-frame {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+      }
+
+      .camera-frame strong {
+        font-family: Georgia, serif;
+        font-weight: normal;
+      }
+
+      canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 10px;
+        background: #0f172a;
+      }
+
+      #source,
+      #target {
+        aspect-ratio: 4 / 3;
+      }
+
+      @media (max-width: 900px) {
+        .grid-step {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <style></style>
+  </head>
+
+  <body>
+    <header>
+      <h1>WebWorker &amp; Camera</h1>
+    </header>
+
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Obróbka video w workerze</h2>
+          <ul>
+            <li><code>Worker</code> może obrabiać klatki video bez blokowania UI.</li>
+            <li>Porównaj FPS przy włączonym i wyłączonym workerze.</li>
+            <li>Sprawdź też opóźnienie obrazu przy wysyłaniu klatek do workera.</li>
+          </ul>
+          <code>
+            const worker = new Worker('webworker-camera-worker.js', { type: 'module' })<br />
+            worker.postMessage(imgData, { transfer: [imgData.data.buffer] })
+          </code>
+        </div>
+
+        <div class="demo-panel camera-panel">
+          <p class="token-label">Demo kamery</p>
+          <div class="camera-controls">
+            <label for="with-worker">Użyj Workera do obróbki video</label>
+            <input type="checkbox" name="with-worker" id="with-worker" />
+          </div>
+          <p class="camera-note">Zobacz FPS przy włączonym/wyłączonym workerze. Popatrz też, jakie opóźnienie ma obraz dla włączonego Workera.</p>
+          <video></video>
+          <div class="camera-stage">
+            <div class="camera-frame">
+              <strong>Źródło</strong>
+              <canvas width="800" height="600" id="source"></canvas>
+            </div>
+            <div class="camera-frame">
+              <strong>Wynik</strong>
+              <canvas width="800" height="600" id="target"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

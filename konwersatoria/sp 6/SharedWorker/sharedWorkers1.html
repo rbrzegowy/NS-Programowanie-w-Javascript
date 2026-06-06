@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" href="../worker.css" />
+    <title>SharedWorker</title>
+    <style>
+      .shared-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 1fr;
+      }
+
+      .shared-grid > * {
+        min-width: 0;
+      }
+
+      .box {
+        min-height: 320px;
+      }
+
+      .result-card.box {
+        display: grid;
+        align-content: start;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .with-iframe {
+        display: flex;
+        flex-direction: column;
+      }
+
+      h4 {
+        margin: 0;
+        font-family: Georgia, serif;
+        font-weight: normal;
+      }
+
+      iframe {
+        min-height: 300px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #d8e1ee;
+        border-radius: 12px;
+        background: #fff;
+      }
+
+      .internal {
+        min-height: 180px;
+        padding: 12px;
+        box-sizing: border-box;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #334155;
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Shared Workers
+    Workery współdzielony pomiędzy różnymi kontekstami (okna, iframe etc)
+    
+    Tworzenie:
+    let sworker = new SharedWorker('worker.js');
+    sworker.port.start()
+
+    Worker:
+    port.start()
+
+    Komunikacja:
+    sworker.port.postMessage('msg')
+
+    worker file:
+    port.onmessage = e => {}
+     -->
+    <header>
+      <h1>Shared Worker</h1>
+    </header>
+
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Wspólny worker dla wielu kontekstów</h2>
+          <ul>
+            <li><code>SharedWorker</code> może obsługiwać wiele kart, okien albo iframe.</li>
+            <li>Każdy klient komunikuje się przez własny <code>port</code>.</li>
+            <li>Tutaj - główne okno i iframe korzystają z tego samego workera.</li>
+          </ul>
+          <code>
+            const w = new SharedWorker('./sharedworker.js')<br />
+            w.port.postMessage('hello shared!')
+          </code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Demo SharedWorker</p>
+          <div class="shared-grid">
+            <div class="result-card box">
+              <h4>Skrypt główny</h4>
+              <div class="demo-controls">
+                <button type="button" id="startstop">Start SharedWorker</button>
+                <button type="button" id="sendMessage">Wyślij wiadomość</button>
+              </div>
+              <div class="internal"></div>
+            </div>
+
+            <div class="result-card box with-iframe">
+              <h4>Skrypt w iframe</h4>
+              <iframe src="./sharedWorkers2.html" title="Shared Worker iframe demo"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      let w
+
+      document.querySelector('#startstop').addEventListener('click', event => {
+        if (w instanceof SharedWorker) {
+          w.port.postMessage('terminate')
+          w = undefined
+          event.target.innerHTML = 'Start Shared Worker'
+        } else {
+          w = new SharedWorker(new URL('./sharedworker.js', import.meta.url), { type: 'module' })
+          w.port.start()
+          w.port.onmessage = function (e) {
+            console.log(`[main script - msg from worker]: ${e.data}`)
+            document.querySelector('.internal').innerHTML = e.data + '<br>' + document.querySelector('.internal').innerHTML
+          }
+          console.log('SharedWorker start', w)
+          event.target.innerHTML = 'Stop Shared Worker'
+        }
+      })
+
+      document.querySelector('#sendMessage').addEventListener('click', () => {
+        w.port.postMessage('hello shared!')
+      })
+    </script>
+  </body>
+</html>

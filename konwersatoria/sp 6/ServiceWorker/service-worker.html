@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Worker</title>
+    <script type="text/javascript" src="service-worker.js"></script>
+    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" href="../worker.css" />
+    <link rel="stylesheet" href="service-worker.css" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <link rel="manifest" href="./imageapp_1.webmanifest" />
+    <style></style>
+  </head>
+
+  <body>
+    <!-- 
+        ServiceWorker działa niezależnie od karty z widokiem strony, karta (a nawet przeglądarka) mogą być zamknięte:)
+        ServiceWorker działa najcześciej jako:
+        a/ pośrednik (proxy) w ładowaniu strony - obsługuje stronę offline
+        b/ jako element docelowy powiadomień Push API (wysyłanych przez zewnętrzne źródło)
+        c/ jako generator powiadomień dla użytkownika (Notification API)
+        
+        Ograniczenia: tylko na https (z wyłączeniem localhost)
+
+        Cykl życia service workera: ./sw-lifecycle.png ./service-worker-lifecycle.jpg
+
+        // Zasięg działania SW - może być globalny dla origin-a 
+        // lub lokalny do katalogu (wtedy SW musi być w katalogu)
+
+        // Inspekcja: 
+        // sekcja Application DevTools
+        // chrome://inspect/#service-workers
+        // chrome://serviceworker-internals (możliwość debugowanie startu SW)
+
+        RESOURCES:
+        GUIDE 
+        https://www.smashingmagazine.com/2018/11/guide-pwa-progressive-web-applications/
+        https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+        https://developers.google.com/web/fundamentals/primers/service-workers/
+        https://serviceworke.rs/push-payload_demo.html
+        
+     -->
+    <header>
+      <h1>Service Worker</h1>
+    </header>
+
+    <main>
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Service Worker?</h2>
+          <ul>
+            <li><code>ServiceWorker</code> działa niezależnie od karty z widokiem strony, karta, a nawet przeglądarka mogą być zamknięte.</li>
+            <li>Najczęściej działa jako pośrednik (proxy) w ładowaniu strony i obsłudze offline.</li>
+            <li>Może być elementem docelowym dla <code>Push API</code> i generować powiadomienia przez <code>Notification API</code>.</li>
+          </ul>
+          <code>
+            navigator.serviceWorker.register('service-worker-thread.js')<br />
+            self.addEventListener('fetch', handler)
+          </code>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">2</span>
+          <h2>Offline cache</h2>
+          <ul>
+            <li>Przykład obsługi aplikacji offline.</li>
+            <li>Wyłącz sięć (DevTools->Network->Offline)</li>
+            <li>Demo - cache aplikacji, styl i obrazów (wraz z fallback).</li>
+          </ul>
+          <code>
+            navigator.serviceWorker.register('service-worker-thread.js')<br />
+            navigator.onLine
+          </code>
+        </div>
+
+        <div class="demo-panel service-worker-panel">
+          <p class="token-label">Demo galerii</p>
+          <div class="result-card">
+            <strong>Status sieci</strong>
+            <p id="net-status" class="demo-log">Stan sieci: sprawdzanie...</p>
+          </div>
+
+          <div class="gallery-card">
+            <div id="gallery">
+              <img src="img/1.jpg" alt="" />
+              <img src="img/2.jpg" alt="" />
+              <img src="img/3.jpg" alt="" />
+              <img src="img/4.jpg" alt="" />
+              <img src="img/5.jpg" alt="" />
+              <img src="img/6.jpg" alt="" />
+              <img src="img/7.jpg" alt="" />
+              <img src="img/8.jpg" alt="" />
+              <img src="img/9.jpg" alt="" />
+              <img src="img/10.jpg" alt="" />
+              <img src="img/11.jpg" alt="" />
+              <img src="img/12.jpg" alt="" />
+              <img src="img/13.jpg" alt="" />
+              <img src="img/14.jpg" alt="" />
+              <img src="img/15.jpg" alt="" />
+              <img src="img/16.jpg" alt="" />
+              <img src="img/17.jpg" alt="" />
+              <img src="img/18.jpg" alt="" />
+              <img src="img/19.jpg" alt="" />
+              <img src="img/20.jpg" alt="" />
+              <img src="img/21.jpg" alt="" />
+              <img src="img/22.jpg" alt="" />
+              <img src="img/23.jpg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">3</span>
+          <h2>Ograniczenia, zasięg i inspekcja</h2>
+          <ul>
+            <li>Service Worker działa tylko na <code>https</code>, z wyjątkiem <code>localhost</code>.</li>
+            <li>Zasięg działania SW może być globalny dla origin-a albo lokalny do katalogu.</li>
+            <li>Do inspekcji używa się głównie sekcji Application w DevTools i stron diagnostycznych Chrome.</li>
+          </ul>
+          <code>
+            chrome://inspect/#service-workers<br />
+            chrome://serviceworker-internals
+          </code>
+        </div>
+      </section>
+
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">4</span>
+          <h2>Cykl życia Service Workera</h2>
+          <ul>
+            <li>Instalacja, aktywacja i przechwytywanie żądań to kluczowe etapy działania SW.</li>
+            <li>Warto znać cykl życia, bo wpływa na cache, aktualizacje i debugging.</li>
+          </ul>
+          <code>install -&gt; activate -&gt; fetch / push / sync</code>
+        </div>
+
+        <div class="demo-panel">
+          <p class="token-label">Schemat</p>
+          <div class="result-card lifecycle-card">
+            <img class="lifecycle-image" src="./service-worker-lifecycle.png" alt="Cykl życia Service Workera" />
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
