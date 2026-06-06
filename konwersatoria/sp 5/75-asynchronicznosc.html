@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asynchroniczność w JavaScript</title>
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="75-asynchronicznosc.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Asynchroniczność w JavaScript</h1>
+    </header>
+
+    <main>
+      <!-- 1. callback podstawowy -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">1</span>
+          <h2>Callbacki</h2>
+          <ul>
+            <li>Callback to funkcja przekazana do innej funkcji i wywołana później.</li>
+            <li>To podstawowy mechanizm, fundament pozostałych rozwiązań</li>
+            <li>Uwaga na callback hell</li>
+          </ul>
+          <code>
+            function zrobPozniej(fn) { setTimeout(fn, 600) } <br />
+            zrobPozniej(() =&gt; console.log('callback wykonany'))
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo callback</p>
+          <div class="demo-controls">
+            <button id="cb-run" type="button">Uruchom callback</button>
+            <button id="cb-clear" type="button">Wyczyść log</button>
+          </div>
+          <div class="result-card">
+            <strong>Log callbacków</strong>
+            <ul id="cb-log" class="result-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. addEventListener -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">2</span>
+          <h2>Zdarzenia - addEventListener</h2>
+          <ul>
+            <li>Obsługa zdarzeń jest asynchroniczna względem głównego kodu.</li>
+            <li>Możesz zapisać się na jedno wystąpienie zdarzenia: <code>once: true</code>.</li>
+          </ul>
+          <code>
+            el.addEventListener('click', onClick, { once: true }) <br />
+            el.addEventListener('pointerenter', () =&gt; ...)
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo eventów</p>
+          <div id="event-area" class="event-area">Kliknij lub najedź</div>
+          <div class="demo-controls">
+            <button id="event-arm-once" type="button">Uzbrój once-click</button>
+            <button id="event-clear" type="button">Wyczyść log</button>
+          </div>
+          <div class="result-card">
+            <strong>Log eventów</strong>
+            <ul id="event-log" class="result-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. timery -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">3</span>
+          <h2>setTimeout i setInterval</h2>
+          <ul>
+            <li><code>setTimeout</code> uruchamia callback raz po podanym czasie.</li>
+            <li><code>setInterval</code> uruchamia callback cyklicznie.</li>
+            <li>Pamiętaj o <code>clearInterval</code> lub <code>clearTimeout</code>, gdy timer nie jest już potrzebny.</li>
+          </ul>
+          <code>
+            setTimeout(() =&gt; console.log('raz'), 1000) <br />
+            const id = setInterval(() =&gt; console.log('tick'), 1000)
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo timerów</p>
+          <div class="demo-controls">
+            <button id="timer-timeout" type="button">setTimeout</button>
+            <button id="timer-start" type="button">Start interval</button>
+            <button id="timer-stop" type="button">Stop interval</button>
+          </div>
+          <div class="result-card">
+            <strong>Licznik</strong>
+            <p id="timer-counter" class="demo-log">Tick: 0</p>
+            <strong>Log timerów</strong>
+            <ul id="timer-log" class="result-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. XHR -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">4</span>
+          <h2>XMLHttpRequest</h2>
+          <ul>
+            <li>Działa w oparciu o zdarzenia. m.in.: <code>readystatechange</code>, <code>load</code>, <code>error</code>.</li>
+            <li>XHR jest legacy, jego następca to <code>fetch</code>.</li>
+            <li>...ale jest nadal używany (np. do download/upload progress - brak w fetch)</li>
+          </ul>
+          <code>
+            const xhr = new XMLHttpRequest() <br />
+            xhr.open('GET', url, true); xhr.send()
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo XHR</p>
+          <div class="demo-controls">
+            <button id="xhr-run" type="button">Uruchom XHR</button>
+          </div>
+          <div class="status-grid">
+            <div class="result-card">
+              <strong>readyState / status</strong>
+              <ul id="xhr-state-log" class="result-list"></ul>
+            </div>
+            <div class="result-card">
+              <strong>Odpowiedź JSON</strong>
+              <pre id="xhr-json">Brak danych</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. fetch + promise -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">5</span>
+          <h2>Promise i fetch</h2>
+          <ul>
+            <li>Promise to obiekt reprezentujący operację asynchroniczną, która może zakończyć się powodzeniem lub niepowodzeniem.</li>
+            <li><code>fetch</code> zwraca Promise z odpowiedzią.</li>
+            <li>Łańcuch <code>then</code> przetwarza dane krok po kroku.</li>
+            <li><code>catch</code> i <code>finally</code> odpowiadają za obsługę błędów i cleanup.</li>
+          </ul>
+          <code>
+            fetch(url).then(r =&gt; r.json()) <br />
+            .then(data =&gt; ...).catch(err =&gt; ...).finally(() =&gt; ...)
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo fetch + Promise</p>
+          <div class="demo-controls">
+            <button id="fetch-promise-run" type="button">Uruchom fetch Promise</button>
+          </div>
+          <div class="result-card">
+            <strong>Log Promise chain</strong>
+            <ul id="fetch-promise-log" class="result-list"></ul>
+            <strong>Wynik</strong>
+            <pre id="fetch-promise-json">Brak danych</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. async await -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">6</span>
+          <h2>async / await</h2>
+          <ul>
+            <li>async/await spłaszcza korzystanie z Promise</li>
+            <li>Kod wewnątrz async fn korzystający z await pozostaje synchroniczny</li>
+            <li><code>await</code> działa tylko wewnątrz funkcji <code>async</code>.</li>
+            <li>Funkcja <code>async</code> zawsze zwraca Promise.</li>
+            <li><code>try/catch</code> może zostać wykorzystany do obsługi błędów.</li>
+          </ul>
+          <code>
+            async function load() { <br />
+            &nbsp;&nbsp;const res = await fetch(url)
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo async/await</p>
+          <div class="demo-controls">
+            <button id="async-await-run" type="button">Uruchom async/await</button>
+            <button id="async-parallel-run" type="button">Równolegle (Promise.all)</button>
+          </div>
+          <div class="result-card">
+            <strong>Log async/await</strong>
+            <ul id="async-log" class="result-list"></ul>
+            <strong>Wynik</strong>
+            <pre id="async-json">Brak danych</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. promise combinators -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">7</span>
+          <h2>Łączenie Promise: all, allSettled, race, any</h2>
+          <ul>
+            <li><code>Promise.all</code> - wszystko albo błąd.</li>
+            <li><code>Promise.allSettled</code> - komplet wyników, także odrzucone.</li>
+            <li><code>Promise.race</code>/<code>Promise.any</code> - wygrywa najszybszy (race - jakiekolwiek, any - pierwszy pozytywny).</li>
+          </ul>
+          <code>
+            Promise.all([p1, p2, p3]) <br />
+            Promise.allSettled([p1, p2, p3])
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo kombinatorów</p>
+          <div class="demo-controls">
+            <button id="comb-all" type="button">Promise.all</button>
+            <button id="comb-allsettled" type="button">Promise.allSettled</button>
+            <button id="comb-race" type="button">Promise.race</button>
+            <button id="comb-any" type="button">Promise.any</button>
+          </div>
+          <div class="result-card">
+            <strong>Wynik</strong>
+            <pre id="comb-output">Brak danych</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. event loop -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">8</span>
+          <h2>Event Loop: mikro- i makrozadania</h2>
+          <ul>
+            <li><code>Promise.then</code> i <code>queueMicrotask</code> to mikrotaski.</li>
+            <li><code>setTimeout</code> to makrotask.</li>
+            <li>Mikrotaski są opróżniane przed kolejnym makrotaskiem.</li>
+          </ul>
+          <code>
+            setTimeout(() =&gt; log('timeout'), 0) <br />
+            Promise.resolve().then(() =&gt; log('microtask'))
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo Event Loop</p>
+          <div class="demo-controls">
+            <button id="loop-run" type="button">Uruchom kolejkę zadań</button>
+          </div>
+          <div class="result-card">
+            <strong>Kolejność wykonania</strong>
+            <ol id="loop-log" class="result-list"></ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. anulowanie -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">9</span>
+          <h2>Anulowanie operacji: AbortController</h2>
+          <ul>
+            <li>Przy długich requestach warto mieć możliwość anulowania.</li>
+            <li><code>AbortController</code> działa m.in. z <code>fetch</code>.</li>
+            <li>To ważne przy przełączaniu widoków lub odmontowaniu komponentu.</li>
+          </ul>
+          <code>
+            const controller = new AbortController() <br />
+            fetch(url, { signal: controller.signal })
+          </code>
+        </div>
+        <div class="demo-panel">
+          <p class="token-label">Demo anulowania fetch</p>
+          <div class="demo-controls">
+            <button id="abort-start" type="button">Start fetch</button>
+            <button id="abort-now" type="button">Abort</button>
+          </div>
+          <div class="result-card">
+            <strong>Status</strong>
+            <p id="abort-status" class="demo-log">Brak aktywnego żądania</p>
+            <strong>Log</strong>
+            <ul id="abort-log" class="result-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. debugowanie async -->
+      <section class="grid-step">
+        <div class="step-copy">
+          <span class="step-number">10</span>
+          <h2>Debugowanie async, fetch i XHR</h2>
+          <ul>
+            <li>DevTools użyj zakładki Network i filtrów Fetch/XHR - możesz sprawdzić status, czas i payload.</li>
+            <li>W Sources ustaw breakpoints w callbackach, <code>then</code> oraz funkcjach <code>async</code>.</li>
+            <li>Włącz <code>Preserve log</code> i <code>Disable cache</code>, aby nie gubić kontekstu między przeładowaniami.</li>
+          </ul>
+          <code>
+            console.time('req'); fetch(url)...finally(() =&gt; console.timeEnd('req')) <br />
+            debugger; // zatrzymanie kodu w kluczowym momencie
+          </code>
+        </div>
+        <!-- <div class="demo-panel">
+          <p class="token-label">Checklista debugowania</p>
+          <div class="result-card">
+            <ul id="debug-checklist" class="result-list">
+              <li><input id="dbg-step-1" type="checkbox" /> Sprawdzono URL, metodę i nagłówki requestu</li>
+              <li><input id="dbg-step-2" type="checkbox" /> Sprawdzono status HTTP i treść odpowiedzi</li>
+              <li><input id="dbg-step-3" type="checkbox" /> Dodano obsługę błędów (catch / error event)</li>
+              <li><input id="dbg-step-4" type="checkbox" /> Zweryfikowano kolejność mikrotask/makrotask</li>
+            </ul>
+          </div>
+          <div class="demo-controls">
+            <button id="debug-run-diagnostics" type="button">Uruchom mini diagnostykę</button>
+            <button id="debug-clear-log" type="button">Wyczyść log</button>
+          </div>
+          <div class="status-grid">
+            <div class="result-card">
+              <strong>Log diagnostyczny</strong>
+              <ul id="debug-log" class="result-list"></ul>
+            </div>
+            <div class="result-card">
+              <strong>Podsumowanie</strong>
+              <p id="debug-summary" class="demo-log">Brak diagnostyki</p>
+            </div>
+          </div>
+        </div> -->
+      </section>
+    </main>
+
+    <script src="75-asynchronicznosc.js"></script>
+  </body>
+</html>
